@@ -53,6 +53,12 @@ public class CarteFRestController {
     public void deleteCarteF(CarteFidelite carteFidelite){
         carteFService.deleteCarteFidelite(carteFidelite);
     }
+
+    @GetMapping("/test-anniversaire")
+    public String testIncrementerPoints() {
+        carteFService.incrementerPointsAnniversaire();
+        return "Méthode exécutée ! Vérifie les logs et la base de données.";
+    }
 }
 
 

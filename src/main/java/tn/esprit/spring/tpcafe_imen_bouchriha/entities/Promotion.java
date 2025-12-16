@@ -1,5 +1,6 @@
 package tn.esprit.spring.tpcafe_imen_bouchriha.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +25,7 @@ public class Promotion {
      LocalDate dateDebutPromo;
      LocalDate dateFinPromo;
     @ManyToMany(mappedBy = "promotions")
+    @JsonIgnore
     List<Article> articles;
 
 }

@@ -1,5 +1,6 @@
 package tn.esprit.spring.tpcafe_imen_bouchriha.services.clientservices;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import tn.esprit.spring.tpcafe_imen_bouchriha.repositories.CarteFideliteReposito
 import tn.esprit.spring.tpcafe_imen_bouchriha.repositories.ClientRepository;
 import tn.esprit.spring.tpcafe_imen_bouchriha.repositories.CommandeRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 @Service
 @AllArgsConstructor
@@ -73,19 +75,35 @@ public class ClientService implements IClientService {
 
 
     @Override
-        public Client ajouterClientEtCarteFidelite(Client client) {
+    public Client ajouterClientEtCarteFidelite(Client client) {
 
-            // 1. Créer une nouvelle carte fidélité
-            CarteFidelite carte = new CarteFidelite();
-            carte.setPointsAccumules(0); // initialisation
-            carte.setClient(client);     // liaison vers le client
+        CarteFidelite carte = new CarteFidelite();
+        carte.setPointsAccumules(0);
+        carte.setDateCreation(LocalDate.now());
+        carte.setClient(client); // relation vers client
 
-            // 2. Affecter la carte au client
-            client.setCarteFidelite(carte);
+        client.setCarteFidelite(carte); // relation vers carte
 
-            return clientRepository.save(client);
+        return clientRepository.save(client);
+    }
+
+    @Transactional
+    @Override
+    public void deleteClientAndCard(Long idClient) {
+
+        Client client = clientRepository.findById(idClient)
+                .orElseThrow(() -> new RuntimeException("Client introuvable"));
+
+        CarteFidelite carte = client.getCarteFidelite();
+
+        if (carte != null) {
+
+            carte.setClient(null);
+            client.setCarteFidelite(null);
+            carteFideliteRepository.delete(carte);
         }
-
+        clientRepository.delete(client);
+    }
 
 
 
@@ -107,17 +125,22 @@ public class ClientService implements IClientService {
         // 1. Récupérer les objets
         Client client = clientRepository.findById(idClient).orElse(null);
         CarteFidelite carte = carteFideliteRepository.findById(idCarte).orElse(null);
-
-        // 2. Vérifier l'existence
-        if (client == null || carte == null) {
-            return;
-        }
+        
 
         // 3. Affecter la carte au client
         carte.setClient(client);
         carteFideliteRepository.save(carte);
     }
 
+    @Override
+    public void ajouterEtAffecterAdresseAClient(Adresse a, Client c) {
+        // Lier l'adresse au client
+        a.setClient(c);
+        c.setAdresse(a);
+
+        // Sauvegarder le client (cascade sauvegarde automatiquement l'adresse)
+        clientRepository.save(c);
+    }
 
 }
 

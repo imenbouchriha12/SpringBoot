@@ -21,6 +21,8 @@ public interface IArticleService {
     void affecterPromotionAArticle(long idArticle, long idPromo);
     void desaffecterPromotionDUnArticle(long idArticle, long idPromo);
     void ajouterPromoEtAffecterAArticle(Promotion p , Long idArticle);
+    void deleteArticleAndPromotions(Long idArticle);
 
 
+    List<Article> getArticlesWithPromotionThisMonth(int month, int year);
 }

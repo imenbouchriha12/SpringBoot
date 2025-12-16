@@ -3,6 +3,7 @@ package tn.esprit.spring.tpcafe_imen_bouchriha.restcontrollers;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.spring.tpcafe_imen_bouchriha.entities.Adresse;
 import tn.esprit.spring.tpcafe_imen_bouchriha.entities.Article;
 import tn.esprit.spring.tpcafe_imen_bouchriha.entities.CarteFidelite;
 import tn.esprit.spring.tpcafe_imen_bouchriha.entities.Client;
@@ -79,6 +80,20 @@ public class ClientRestController {
     public ResponseEntity<Client> ajouterClientEtCarteFidelite(@RequestBody Client client) {
         Client savedClient = clientService.ajouterClientEtCarteFidelite(client);
         return ResponseEntity.ok(savedClient);
+    }
+
+    @DeleteMapping("/delete-client-with-carte/{idClient}")
+    public ResponseEntity<String> deleteClientWithCarte(@PathVariable Long idClient) {
+
+        clientService.deleteClientAndCard(idClient);
+
+        return ResponseEntity.ok("Client et carte fidélité supprimés avec succès");
+    }
+
+    @PostMapping("/add-to-client")
+    public ResponseEntity<String> ajouterAdresseAuClient(@RequestBody  Adresse a , Client c) {
+        clientService.ajouterEtAffecterAdresseAClient(c.getAdresse(), a.getClient());
+        return ResponseEntity.ok("Adresse ajoutée et affectée au client avec succès !");
     }
 
 

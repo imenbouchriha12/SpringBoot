@@ -20,8 +20,7 @@ public interface ICommandeService {
     void affecterCommandeAClient(Long idCommande, Long idClient);
     void affecterCommandeAClient(LocalDate dateCommande, String nomClient, String prenomClient);
     void desaffecterClientDeCommande(long idCommande);
-    void ajouterCommandeEtAffecterAClient(Commande c , String nomClient , String prenomClient );
-
+    Commande ajouterCommandeEtAffecterAClient(Commande c, String nomC, String prenomC);
 
 
 

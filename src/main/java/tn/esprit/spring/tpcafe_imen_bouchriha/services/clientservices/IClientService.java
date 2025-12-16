@@ -1,4 +1,5 @@
 package tn.esprit.spring.tpcafe_imen_bouchriha.services.clientservices;
+import tn.esprit.spring.tpcafe_imen_bouchriha.entities.Adresse;
 import tn.esprit.spring.tpcafe_imen_bouchriha.entities.Client;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public interface IClientService {
     Client ajouterClientEtCarteFidelite(Client client);
     String affecterAdresseAClient(String rue,long cin);
     void affecterCarteAClient(long idCarte, long idClient);
+    void deleteClientAndCard(Long idClient);
+    void ajouterEtAffecterAdresseAClient(Adresse a, Client c);
 
 
 }

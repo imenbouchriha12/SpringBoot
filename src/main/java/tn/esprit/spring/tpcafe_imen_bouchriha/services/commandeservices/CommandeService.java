@@ -10,6 +10,8 @@ import tn.esprit.spring.tpcafe_imen_bouchriha.repositories.CommandeRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class CommandeService implements ICommandeService {
@@ -108,17 +110,25 @@ public class CommandeService implements ICommandeService {
     }
 
 
-    @Override
+  /*  @Override
     public void ajouterCommandeEtAffecterAClient(Commande c, String nomClient, String prenomClient) {
 
-        c = commandeRepository.save(c);
         Client client = clientRepository.findByNomAndPrenom(nomClient, prenomClient);
         c.setClient(client);
+        client.getCommandes().add(c);
+
         commandeRepository.save(c);
+    }*/
+
+    @Override
+    public Commande ajouterCommandeEtAffecterAClient(Commande c, String nomC, String prenomC) {
+        // Chercher le client par nom et prénom
+        Client client = clientRepository.findByNomAndPrenom(nomC, prenomC);
+
+        // Affecter la commande au client
+        c.setClient(client);
+
+        // Sauvegarder la commande
+        return commandeRepository.save(c);
     }
-
-
-
-
-
 }

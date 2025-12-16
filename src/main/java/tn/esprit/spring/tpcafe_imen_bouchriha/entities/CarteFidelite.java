@@ -1,5 +1,7 @@
 package tn.esprit.spring.tpcafe_imen_bouchriha.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -13,16 +15,16 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode
 public class CarteFidelite {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Long idCarteFidilite;
-     int pointsAccumules;
-     LocalDate dateCreation;
+    Long idCarteFidilite;
+
+    int pointsAccumules;
+    LocalDate dateCreation;
+
     @OneToOne
+    @JoinColumn(name = "client_id")
     private Client client;
-
-
-
 }

@@ -65,5 +65,16 @@ public class AdresseService implements IAdresseService{
         return adresserepository.findById(id).get();
     }
 
+    @Override
+    public Client ajouterClientEtAdresse(Client client, Adresse adresse) {
+        // Associer l'adresse au client
+        client.setAdresse(adresse);
+
+        // Optionnel si relation bidirectionnelle
+        adresse.setClient(client);
+
+        // Sauvegarder le client (l'adresse sera sauvegardée automatiquement)
+        return clientrepository.save(client);
+    }
 
 }

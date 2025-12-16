@@ -12,6 +12,7 @@ import tn.esprit.spring.tpcafe_imen_bouchriha.entities.Promotion;
 import tn.esprit.spring.tpcafe_imen_bouchriha.repositories.ArticleRepository;
 import tn.esprit.spring.tpcafe_imen_bouchriha.services.articleservices.IArticleService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -118,6 +119,21 @@ public class ArticleRestController {
         articleService.ajouterPromoEtAffecterAArticle(promotion, idArticle);
 
         return ResponseEntity.ok("Promotion ajoutée et affectée à l'article avec succès");
+    }
+    @DeleteMapping("/delete-article-with-promotions/{idArticle}")
+    public ResponseEntity<String> deleteArticleWithPromotions(@PathVariable Long idArticle) {
+
+        articleService.deleteArticleAndPromotions(idArticle);
+
+        return ResponseEntity.ok("Article et promotions supprimés avec succès");
+    }
+    @GetMapping("/promo")
+    public List<Article> getArticlesWithPromotionThisMonth() {
+        LocalDate today = LocalDate.now();
+        int currentMonth = today.getMonthValue();
+        int currentYear = today.getYear();
+
+        return articleService.getArticlesWithPromotionThisMonth(currentMonth, currentYear);
     }
 
 }

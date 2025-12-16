@@ -1,9 +1,12 @@
 package tn.esprit.spring.tpcafe_imen_bouchriha.restcontrollers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.spring.tpcafe_imen_bouchriha.entities.Adresse;
+import tn.esprit.spring.tpcafe_imen_bouchriha.entities.Client;
 import tn.esprit.spring.tpcafe_imen_bouchriha.services.adresseservices.IAdresseService;
+import tn.esprit.spring.tpcafe_imen_bouchriha.services.clientservices.IClientService;
 
 import java.util.List;
 @RestController
@@ -11,6 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class AddresseRestController {
     private IAdresseService adresseService;
+    private IClientService clientService;
+
     @GetMapping
     public List<Adresse> selectAllAdresses() {
         return adresseService.findAllAdresses();
@@ -52,6 +57,13 @@ public class AddresseRestController {
     @PostMapping("/verifAdresse")
     public boolean verifAdresseById(@RequestParam long id) {
         return adresseService.verifAdresseById(id);
+    }
+
+    @PostMapping("/add-client-with-adresse")
+    public ResponseEntity<Client> addClientWithAdresse(@RequestBody Client client) {
+        Client savedClient = adresseService.ajouterClientEtAdresse(
+                client, client.getAdresse());
+        return ResponseEntity.ok(savedClient);
     }
 
 

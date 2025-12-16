@@ -88,7 +88,7 @@ public class CommandeRestController {
         return ResponseEntity.ok("Commande affectée au client avec succès");
     }
 
-    @PostMapping("/add/{nom}/{prenom}")
+    /*@PostMapping("/add/{nom}/{prenom}")
     public Commande addCommandeAndAffect(
             @RequestBody Commande commande,
             @PathVariable String nom,
@@ -96,6 +96,17 @@ public class CommandeRestController {
     ) {
         CommandeService.ajouterCommandeEtAffecterAClient(commande, nom, prenom);
         return commande;
+    }*/
+
+
+    @PostMapping("/ajouterCommandeEtAffecterAClient/{nomC}/{prenomC}")
+    public ResponseEntity<Commande> ajouterCommandeEtAffecterAClient(
+            @RequestBody Commande commande,
+            @PathVariable String nomC,
+            @PathVariable String prenomC) {
+
+        Commande savedCommande = CommandeService.ajouterCommandeEtAffecterAClient(commande, nomC, prenomC);
+        return ResponseEntity.ok(savedCommande);
     }
 
 }

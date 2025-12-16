@@ -1,6 +1,8 @@
 package tn.esprit.spring.tpcafe_imen_bouchriha.services.adresseservices;
 
 import tn.esprit.spring.tpcafe_imen_bouchriha.entities.Adresse;
+import tn.esprit.spring.tpcafe_imen_bouchriha.entities.Client;
+
 import java.util.List;
 
 public interface IAdresseService {
@@ -14,7 +16,6 @@ public interface IAdresseService {
     long countAdresses();
     boolean verifAdresseById(long id);
     Adresse selectAdresseById(long id);
-
-
+    Client ajouterClientEtAdresse(Client client, Adresse adresse);
 }
 

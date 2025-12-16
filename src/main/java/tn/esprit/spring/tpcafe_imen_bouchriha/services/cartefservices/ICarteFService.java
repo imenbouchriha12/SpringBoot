@@ -17,4 +17,5 @@ public interface ICarteFService {
     CarteFidelite selectUserById(long id);
 
 
+    void incrementerPointsAnniversaire();
 }

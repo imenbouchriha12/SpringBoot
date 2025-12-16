@@ -1,16 +1,24 @@
 package tn.esprit.spring.tpcafe_imen_bouchriha.services.articleservices;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.spring.tpcafe_imen_bouchriha.entities.Article;
 import tn.esprit.spring.tpcafe_imen_bouchriha.entities.Promotion;
 import tn.esprit.spring.tpcafe_imen_bouchriha.repositories.ArticleRepository;
 import tn.esprit.spring.tpcafe_imen_bouchriha.repositories.PromotionRepository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
+@Slf4j
+
 public class ArticleService implements  IArticleService{
     ArticleRepository articleRepository;
     PromotionRepository promotionRepository;
@@ -113,6 +121,57 @@ public class ArticleService implements  IArticleService{
 
         articleRepository.save(article);
     }
+
+    @Transactional
+    @Override
+    public void deleteArticleAndPromotions(Long idArticle) {
+
+        Article article = articleRepository.findById(idArticle)
+                .orElseThrow(() -> new RuntimeException("Article introuvable"));
+
+        if (article.getPromotions() != null) {
+            article.getPromotions().forEach(promo -> {
+                promo.getArticles().remove(article); // couper la relation
+
+                // si tu veux supprimer la promotion complètement :
+                if (promo.getArticles().isEmpty()) {
+                    promotionRepository.delete(promo);
+                }
+            });
+
+            article.getPromotions().clear();
+        }
+
+        articleRepository.delete(article);
+    }
+
+    @Scheduled(cron = "0 0 0 1 * *") // Exécution le 1er de chaque mois à minuit
+    public void scheduledPromotionCheck() {
+
+        LocalDate today = LocalDate.now();
+        int month = today.getMonthValue();
+        int year = today.getYear();
+
+        log.info("Vérification automatique des promotions pour {}-{}", month, year);
+
+        getArticlesWithPromotionThisMonth(month, year); // Appel normal
+    }
+    @Override
+    public List<Article> getArticlesWithPromotionThisMonth(int month, int year) {
+
+        List<Article> articles =
+                articleRepository.findArticlesWithPromotionInCurrentMonth(month, year);
+
+            log.info("Articles en promotion pour {}-{} :", month, year);
+            articles.forEach(a ->
+                    log.info("- {} (Prix: {})", a.getNomArticle(), a.getPrixArticle())
+            );
+
+        return articles;
+    }
+
+
+
 
 
 }
