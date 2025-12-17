@@ -125,7 +125,11 @@ public class ClientService implements IClientService {
         // 1. Récupérer les objets
         Client client = clientRepository.findById(idClient).orElse(null);
         CarteFidelite carte = carteFideliteRepository.findById(idCarte).orElse(null);
-        
+
+        // 2. Vérifier l'existence
+        if (client == null || carte == null) {
+            return;
+        }
 
         // 3. Affecter la carte au client
         carte.setClient(client);

@@ -8,6 +8,4 @@ import java.util.Optional;
 
 public interface AdresseRepository extends JpaRepository<Adresse,Long> {
     Optional<Adresse> findByRue(String rue);
-
-
 }
